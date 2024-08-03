@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 const FormSchema = z.object({
@@ -36,8 +37,8 @@ export default function InputForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const encodedMessage = encodeURIComponent(data.textMessage);
     toast.success("Opening WhatsApp...");
+    const encodedMessage = encodeURIComponent(data.textMessage);
     window.open(
       `https://wa.me/${data.mobileNumber}?text=${encodedMessage}`,
       "_blank"
@@ -45,42 +46,51 @@ export default function InputForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-        <FormField
-          control={form.control}
-          name="mobileNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Mobile Number</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter mobile number" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the mobile number you want to send a message to.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="textMessage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Text Message</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter text message" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the message you want to send.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Send</Button>
-      </form>
-    </Form>
+    <div className="flex items-center justify-center h-screen bg-green-500">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="mobileNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mobile Number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter mobile number" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter the mobile number you want to send a message to.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="textMessage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Text Message</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter text message" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter the message you want to send.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700"
+            >
+              Send
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
