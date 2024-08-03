@@ -1,32 +1,86 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import { toast } from "sonner";
 
-export default function Home() {
-  const [mobileNumber, setMobileNumber] = useState("");
+const FormSchema = z.object({
+  mobileNumber: z.string().min(10, {
+    message: "Mobile number must be at least 10 characters.",
+  }),
+  textMessage: z.string().min(1, {
+    message: "Text message cannot be empty.",
+  }),
+});
 
-  const handleSend = () => {
-    if (mobileNumber) {
-      window.open(`https://wa.me/${mobileNumber}`, "_blank");
-    }
-  };
+export default function InputForm() {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      mobileNumber: "",
+      textMessage: "",
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    const encodedMessage = encodeURIComponent(data.textMessage);
+    toast.success("Opening WhatsApp...");
+    window.open(
+      `https://wa.me/${data.mobileNumber}?text=${encodedMessage}`,
+      "_blank"
+    );
+  }
 
   return (
-    <Card className="flex items-center justify-center h-screen">
-      <div className="bg-white flex flex-col gap-y-4 p-8 rounded-lg shadow-lg max-w-md w-full">
-        <Input
-          type="text"
-          placeholder="Enter mobile number"
-          value={mobileNumber}
-          onChange={(e) => setMobileNumber(e.target.value)}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <FormField
+          control={form.control}
+          name="mobileNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mobile Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter mobile number" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter the mobile number you want to send a message to.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <Button className="w-full" onClick={handleSend}>
-          Send
-        </Button>
-      </div>
-    </Card>
+        <FormField
+          control={form.control}
+          name="textMessage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Text Message</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter text message" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter the message you want to send.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Send</Button>
+      </form>
+    </Form>
   );
 }
