@@ -34,6 +34,12 @@ export default function InputForm() {
     },
   });
 
+  const suggestions = ["Hey", "What's up?", "How are you?"];
+
+  function handleSuggestionClick(suggestion: string) {
+    form.setValue("textMessage", suggestion);
+  }
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.mobileNumber) {
       toast.error("Mobile number is required.");
@@ -65,6 +71,7 @@ export default function InputForm() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="textMessage"
@@ -72,12 +79,28 @@ export default function InputForm() {
                   <FormItem>
                     <FormLabel>Text Message</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Enter text message" {...field} />
+                      <Textarea
+                        placeholder="Enter text message"
+                        {...field}
+                        value={field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div className="flex space-x-2 mb-4">
+                {suggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 text-nowrap"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
               <Button
                 type="submit"
                 className="w-full bg-green-600 hover:bg-green-700"
