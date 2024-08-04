@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { PhoneInput } from "@/components/phone-input";
 
 const FormSchema = z.object({
   mobileNumber: z.string().min(10, {
@@ -87,7 +88,7 @@ export default function InputForm() {
                   <FormItem>
                     <FormLabel>Mobile Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="91987654321" {...field} />
+                      <PhoneInput placeholder="91987654321" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
