@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
   mobileNumber: z.string().min(10, {
@@ -33,6 +35,10 @@ export default function InputForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!data.mobileNumber) {
+      toast.error("Mobile number is required.");
+      return;
+    }
     const encodedMessage = encodeURIComponent(data.textMessage || "");
     window.open(
       `https://wa.me/${data.mobileNumber}?text=${encodedMessage}`,
@@ -42,8 +48,8 @@ export default function InputForm() {
 
   return (
     <>
-      <div className="flex items-center justify-center h-screen bg-green-500">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+      <div className="flex items-start justify-center h-screen bg-green-500">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mt-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
