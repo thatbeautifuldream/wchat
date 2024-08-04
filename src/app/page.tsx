@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import ChatBubble from "@/components/chat-bubble";
+import { PhoneInput } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -15,11 +16,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { PhoneInput } from "@/components/phone-input";
 
 const FormSchema = z.object({
   mobileNumber: z.string().min(10, {
@@ -78,6 +77,25 @@ export default function InputForm() {
   return (
     <>
       <div className="flex flex-col items-center justify-start float-top h-screen">
+        <div className="w-full flex items-center justify-center mt-6 mb-6">
+          <a
+            className="mx-auto"
+            href="https://peerlist.io/milind/project/wchat"
+          >
+            <img
+              alt="peerlist"
+              loading="lazy"
+              width="150"
+              height="150"
+              decoding="async"
+              src="https://peerlist.io/images/Launch_Badge_Dark.svg"
+              style={{ color: "transparent" }}
+            />
+          </a>
+        </div>
+        <div className="text-green-900 font-semibold mb-1">
+          WhatsApp without saving the number!
+        </div>
         <Card className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mt-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
